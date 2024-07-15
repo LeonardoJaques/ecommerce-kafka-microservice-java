@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.UUID;
 
 public class CreateUserService {
 		private final Connection connection;
@@ -15,7 +16,12 @@ public class CreateUserService {
 		CreateUserService() throws SQLException {
 				String url = "jdbc:sqlite:target/users_database.db";
 				connection = DriverManager.getConnection(url);
-				connection.createStatement().execute("create table Users (uuid varchar(200) primary key, email varchar(200))");
+				try {
+						connection.createStatement().execute("create table Users (uuid varchar(200) primary key, email varchar(200))");
+				} catch (SQLException e) {
+						// be careful, the sql could be wrong, be really careful
+						e.printStackTrace();
+				}
 		}
 		
 		public static void main(String[] args) throws SQLException {
@@ -35,14 +41,15 @@ public class CreateUserService {
 				System.out.println(record.value());
 				var order = record.value();
 				
-				if (isNewUser(order.getEmail())) insertNewUser(order.getEmail());
-				
+				if (isNewUser(order.getEmail())) {
+						insertNewUser(order.getEmail());
+				}
 				
 		}
 		
 		private void insertNewUser(String email) throws SQLException {
 				var insert = connection.prepareStatement("insert into " + "Users (uuid, email) " + "values (?,?)");
-				insert.setString(1, "uuid");
+				insert.setString(1, UUID.randomUUID().toString());
 				insert.setString(2, email);
 				insert.execute();
 				System.out.println("Usuário uuid e " + email + " adicionado");
