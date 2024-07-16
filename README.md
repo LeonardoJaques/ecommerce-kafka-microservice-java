@@ -53,6 +53,7 @@ graph TD
         serviceFraudDetector["Service Fraud Detector"]
         serviceEmail["Service Email"]
         serviceLog["Service Log"]
+        serviceUsers["Service Users"]
     end
 
     subgraph "Shared Kafka"
@@ -70,6 +71,7 @@ graph TD
     serviceFraudDetector -.-> |Uses| commonKafka
     serviceEmail -.-> |Uses| commonKafka
     serviceLog -.-> |Uses| commonKafka
+    serviceUsers -.-> |Uses| commonKafka
 
 ```
 
