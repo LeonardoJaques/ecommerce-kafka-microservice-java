@@ -1,6 +1,8 @@
 package br.com.jaquesprojetos.ecommerce;
 
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.common.serialization.StringDeserializer;
 
 import java.util.Map;
 
@@ -12,7 +14,7 @@ public class EmailService {
 																						"ECOMMERCE_SEND_EMAIL",
 																						emailService::parse,
 																						String.class,
-																						Map.of())) {
+																						Map.of(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName()))) {
 						service.run();
 				}
 		}
@@ -25,7 +27,7 @@ public class EmailService {
 				System.out.println(record.partition());
 				System.out.println(record.offset());
 				try {
-						Thread.sleep(1000);
+						Thread.sleep(300);
 				} catch (InterruptedException e) {
 						// ignoring
 						e.printStackTrace();
